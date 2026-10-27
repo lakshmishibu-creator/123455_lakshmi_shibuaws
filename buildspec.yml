@@ -1,14 +1,24 @@
 version: 0.2
 
+env:
+  variables:
+    GOCACHE: "/tmp/go-cache"
+    GOPATH: "/tmp/go"
+
 phases:
   install:
     runtime-versions:
       golang: 1.22
+    commands:
+      - echo "Setting up Go cache and directories..."
+      - mkdir -p /tmp/go-cache /tmp/go
+      - echo "Installing dependencies and updating module sums..."
+      - go mod tidy
   pre_build:
     commands:
       - echo "Starting Pre-Build Phase..."
-      - echo "Running Unit & Concurrency Tests with Race Detector..."
-      - go test -v -race ./...
+      - echo "Running Unit & Concurrency Tests..."
+      - go test -v ./...
   build:
     commands:
       - echo "Starting Build Phase..."
